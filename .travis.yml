@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t sumitsetia/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true sumitsetia/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t sumitsetia/multi-client ./client
+  - docker build -t sumitsetia/multi-nginx ./nginx
+  - docker build -t sumitsetia/multi-server ./server
+  - docker build -t sumitsetia/multi-worker ./worker
+  # Log into docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push to docker hub
+  - docker push sumitsetia/multi-client
+  - docker push sumitsetia/multi-nginx
+  - docker push sumitsetia/multi-serve
+  - docker push sumitsetia/multi-worker
+
