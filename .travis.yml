@@ -18,6 +18,6 @@ after_success:
   # Take those images and push to docker hub
   - docker push sumitsetia/multi-client
   - docker push sumitsetia/multi-nginx
-  - docker push sumitsetia/multi-serve
+  - docker push sumitsetia/multi-server
   - docker push sumitsetia/multi-worker
 
